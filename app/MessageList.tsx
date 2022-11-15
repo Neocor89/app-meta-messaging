@@ -14,6 +14,8 @@ function MessageList() {
     const channel = clientPusher.subscribe("messages");
 
     channel.bind("new-message", async (data: Message) => {
+      //: No updating Cached Message
+      if(messages?.find(message => message.id === data.id)) return;
 
       if(!messages) {
         mutate(fetcher);
@@ -24,6 +26,10 @@ function MessageList() {
         })
       }
 
+      return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+      }
     })
   }, [messages, mutate, clientPusher])
   

@@ -11,8 +11,8 @@ export const serverPusher = new Pusher({
   useTLS: true
 });
 
-//: Public ClientId and Cluster
-export const clientPusher = new ClientPusher("public_app_key", {
+//:! Public ClientId
+export const clientPusher = new ClientPusher("", {
   cluster: 'eu',
   forceTLS: true
 });
