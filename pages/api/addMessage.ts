@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { serverPusher } from '../../pusher';
 import redis from '../../redis';
 import { Message } from '../../typing';
 
@@ -33,6 +34,7 @@ const newMessage = {
 
 //: Adding hashed data to Upstash Redis
 await redis.hset('messages', message.id, JSON.stringify(newMessage));
+await serverPusher.trigger("messages", "new-message", newMessage);
 
   res.status(200).json({ message: newMessage })
 }
