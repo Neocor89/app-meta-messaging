@@ -11,7 +11,7 @@ function MessageList() {
   return (
     <div>
       {messages?.map((message) => (
-        <div key={message.id} className="space-y-5 px-5 pt-8 pb-14 max-w-2xl xl:max-w-4xl mx-auto">
+        <div key={message.id} className="space-y-5 px-5 pt-4 sm:pt-8 pb-16 sm:pb-14 max-w-2xl xl:max-w-4xl mx-auto">
           <MessageComponent key={message.id} message={message} />
         </div>
       ))}
