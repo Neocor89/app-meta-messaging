@@ -7,7 +7,11 @@ import { Message } from "../typing";
 import fetcher from "../utils/fetchMessages";
 import MessageComponent from "./MessageComponent";
 
-function MessageList() {
+type Props = {
+  initialMessages: Message[];
+}
+
+function MessageList({initialMessages}: Props) {
   const {data: messages, error, mutate } = useSWR<Message[]>("/api/getMessages", fetcher);
 
   useEffect(() => {
@@ -25,7 +29,7 @@ function MessageList() {
           rollbackOnError: true,
         })
       }
-
+//: {messages?.map((message) => 
       return () => {
         channel.unbind_all();
         channel.unsubscribe();
@@ -33,12 +37,11 @@ function MessageList() {
     })
   }, [messages, mutate, clientPusher])
   
-
   return (
     <div>
       {messages?.map((message) => (
         <div key={message.id} className="space-y-5 px-5 pt-4 sm:pt-8 pb-16 sm:pb-14 max-w-2xl xl:max-w-4xl mx-auto">
-          <MessageComponent key={message.id} message={message} />
+          <MessageComponent key={message.id} message={message || initialMessages} />
         </div>
       ))}
     </div>
