@@ -1,12 +1,18 @@
 "use client";
+
 import { FormEvent, useState } from "react";
 import useSWR from "swr";
 import { v4 as uuidv4 } from 'uuid';
 import { Message } from "../typing";
 import fetcher from "../utils/fetchMessages";
+import  {unstable_getServerSession}  from 'next-auth/next';
+
+type Props = {
+  session: Awaited<ReturnType<typeof unstable_getServerSession>>
+}
 
 
-function ChatInput() {
+function ChatInput({session}: Props) {
   const [input, setInput] = useState("");
   //: Fetch Data and Store in cache
   const {data: messages, error, mutate } = useSWR("/api/getMessages", fetcher);
@@ -14,7 +20,7 @@ function ChatInput() {
   const addMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if(!input) return;
+    if(!input || !session) return;
 
     const messageSend = input;
 
@@ -26,9 +32,9 @@ function ChatInput() {
       id,
       message: messageSend,
       created_at: Date.now(),
-      username: "Ben Devweb",
-      profilePic: "https://res.cloudinary.com/dwoifuutn/image/upload/v1666286613/bendev-messenger-logo_z4pgnu.png",
-      email: "bendevweb@gmail.com",
+      username: session?.user?.name!,
+      profilePic: session?.user?.image!,
+      email: session?.user?.email!,
     }
 
     const uploadMessageToUpstash = async () => {
@@ -59,6 +65,7 @@ function ChatInput() {
       <input 
         type="text"
         value={input}
+        disabled={!session}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Enter your message here..." 
         className="flex-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent px-4 py-3 disabled:opacity-50 disabled:cursor-not-allowed" 

@@ -5,6 +5,10 @@ module.exports = {
     appDir: true,
   },
   images: {
-    domains: ["res.cloudinary.com", "links.papareact.com"],
+    domains: [
+      "res.cloudinary.com",
+      "links.papareact.com",
+      "platform-lookaside.fbsbx.com",
+    ],
   },
 };

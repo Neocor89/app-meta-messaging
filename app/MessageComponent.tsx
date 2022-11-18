@@ -1,5 +1,7 @@
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Message } from "../typing";
+
 
 type Props = {
   message: Message;
@@ -7,7 +9,8 @@ type Props = {
 
 function MessageComponent({ message }: Props) {
 
-  const isUser = true;
+  const {data: session } = useSession();
+  const isUser = session?.user?.email === message.email;
 
   return (
     <div className={`flex flex-col w-fit sm:flex-row ${isUser && "ml-auto"}`}>

@@ -29,7 +29,7 @@ function MessageList({initialMessages}: Props) {
           rollbackOnError: true,
         })
       }
-//: {messages?.map((message) => 
+
       return () => {
         channel.unbind_all();
         channel.unsubscribe();
